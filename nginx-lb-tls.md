@@ -55,3 +55,79 @@ Executing: /lib/systemd/systemd-sysv-install enable nginx
 
 ![](assets/5.png)
 
+4. Create a config file for nginx, and paste in the following lines:
+
+`sudo vi /etc/nginx/sites-available/load_balancer.conf`
+
+```
+#insert following configuration into http section
+
+upstream myproject {
+    server Web1 weight=5;
+    server Web2 weight=5;
+  }
+server {
+    listen 80;
+    server_name typhoenix.site www.typhoenix.site;
+    location / {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_pass http://myproject;
+    }
+  }
+
+#comment out this line
+#       include /etc/nginx/sites-enabled/*;
+```
+
+> My load_balancer.conf contains my domain name instead of default `server_name www.domain.com`
+
+- Remove the default nginx config file;
+
+`sudo rm -rf /etc/nginx/sites-enabled/default`
+
+- Symbolically link the sites-avalaible and sites-enabled together
+
+`sudo ln -s /etc/nginx/sites-available /etc/nginx/sites-enabled`
+
+> **Gotcha!** You need to understand that the target of a symlink is a pathname. And it can be absolute or relative to the directory which contains the symlink.
+
+Assuming you have load_balancer.conf in sites-available. You'd try:
+
+```
+cd sites-enabled
+sudo ln -s ../sites-available/load_balancer.conf .
+
+ls -l
+Now you will have a symlink in sites-enabled called load_balancer.conf which has a target ../sites-available/load_balancer.conf
+
+![](assets/8.png)
+
+- Verify the syntax of your Nginx configuration by running:
+
+`sudo nginx -t`
+
+```
+Output:
+
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+
+- Now reload Nginx (due to the major changes you've made to the config file)
+
+`sudo systemctl reload nginx`
+## Register a new domain name and configure secured connection using SSL/TLS certificates
+
+In order to get a valid SSL certificate - we'll need to register a new domain name, you can do it using any **Domain name registrar** - a company that manages reservation of domain names. The most popular ones are: Godaddy.com, Domain.com, Bluehost.com (I used namecheap.com)
+
+- Register a new domain name with any registrar of your choice in any domain zone (e.g. .com, .net, .org, .edu, .info, .xyz or any other).
+- Create a DNS Zone (I used AWS, feel free to use whatever the equivalence is in your Cloud Provider).
+- Establish an handshake between your newly created zone and your domain, by copying over the name servers from your Cloud DNS to your Domain.
+
+
+
+- Update the *A record* in your Cloud DNS to point to Nginx LB Public address
+
+![](https://github.com/Arafly/Nginx_LB_TLS/blob/master/assets/a_records.PNG)
+
+By following all of these processes above, we can be sure there's a secured handshake between the three parties ie. Nginx Load Balancer, Cloud DNS and the Web Servers.
