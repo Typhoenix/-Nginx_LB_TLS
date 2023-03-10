@@ -102,6 +102,7 @@ Now you will have a symlink in sites-enabled called load_balancer.conf which has
 
 ![](assets/8.png)
 
+
 - Verify the syntax of your Nginx configuration by running:
 
 `sudo nginx -t`
@@ -124,10 +125,13 @@ In order to get a valid SSL certificate - we'll need to register a new domain na
 - Create a DNS Zone (I used AWS, feel free to use whatever the equivalence is in your Cloud Provider).
 - Establish an handshake between your newly created zone and your domain, by copying over the name servers from your Cloud DNS to your Domain.
 
+![](assets/1.png)
 
+![](assets/2.png)
 
 - Update the *A record* in your Cloud DNS to point to Nginx LB Public address
 
-![](https://github.com/Arafly/Nginx_LB_TLS/blob/master/assets/a_records.PNG)
+![](assets/3.png)
+![](assets/4.png)
 
 By following all of these processes above, we can be sure there's a secured handshake between the three parties ie. Nginx Load Balancer, Cloud DNS and the Web Servers.
