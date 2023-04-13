@@ -1,4 +1,4 @@
-## Load Balancer Solution With Nginx and SSL/TLS  
+## Load Balancer Solution With Nginx and SSL/TLS   
 It's critical we secure our client-server communcation with a more secured protocol such as HTTPS. This is to prevent security threats one of which is called Man-In-The-Middle (MIMT) attack
 
 SSL and its newer version, TSL - is a security technology that protects connection from MITM attacks by creating an encrypted session between browser and Web server..
@@ -30,7 +30,7 @@ You can either uninstall Apache from the existing Load Balancer server, or creat
 
 `sudo vi /etc/hosts`
 
-#Add 2 records into this file with Local IP address and arbitrary name for both of your Web Servers
+#Add 2 records into this file with Local IP address and arbitrary name for both of your Web Servers      
 
 <WebServer1-Private-IP-Address> Web1
 <WebServer2-Private-IP-Address> Web2
