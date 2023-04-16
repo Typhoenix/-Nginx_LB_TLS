@@ -1,4 +1,4 @@
-## Load Balancer Solution With Nginx and SSL/TLS                                   
+## Load Balancer Solution With Nginx and SSL/TLS                                      
 It's critical we secure our client-server communcation with a more secured protocol such as HTTPS. This is to prevent security threats one of which is called Man-In-The-Middle (MIMT) attack
 
 SSL and its newer version, TSL - is a security technology that protects connection from MITM attacks by creating an encrypted session between browser and Web server..
